@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -33,11 +34,19 @@ public class VentaResource {
 
     @PostMapping(produces= "application/json", consumes = "application/json")
     public @ResponseBody ResponseEntity<VentaResponse> saveVenta(@RequestBody @Validated VentaRequest ventaRequest){
-        Venta venta = Venta.from(ventaRequest);
-        Venta saved = ventaService.save(venta);
-        VentaResponse ventaResponse = VentaResponse.from(saved);
+        VentaResponse ventaResponse = ventaService.saveVenta(ventaRequest);
         return ResponseEntity.ok(ventaResponse);
     }
+    @DeleteMapping(value = "/{id_ventas}" , produces = "application/json")
+    public void deleteById(@PathVariable("id_ventas") Long id){
+        ventaService.deleteVenta(id);
+    }
 
+    @GetMapping(value= "/listar" ,produces = "application/json")
+    public @ResponseBody ResponseEntity getAllVentas(){
+        List<VentaResponse> responseEntityList = ventaService.getAll();
+            return ResponseEntity.ok(responseEntityList);
+
+    }
 
 }
