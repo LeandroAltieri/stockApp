@@ -1,23 +1,46 @@
 package com.blam.ventasspringthymeleaf.model;
 
+import com.blam.ventasspringthymeleaf.resource.request.ProductoCompraRequest;
 import com.blam.ventasspringthymeleaf.resource.request.ProductoRequest;
+import com.blam.ventasspringthymeleaf.resource.response.ProductoResponse;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "productos")
 public class Producto {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "prod_id")
     private Long id;
+    @Column(name = "prod_nombre")
     private String name;
-    private Double precio;
+    @Column(name = "prod_precio_compra")
+    private Double precioCompra;
+    @Column(name = "prod_precio_venta")
+    private Double precioVenta;
+    @Column(name = "prodStock")
     private Integer stock;
 
     public Producto() {
     }
 
-    public Producto(Long id, String name, Double precio, Integer stock) {
+    public Producto(Long id, String name, Double precioCompra, Double precioVenta, Integer stock) {
         this.id = id;
         this.name = name;
-        this.precio = precio;
+        this.precioCompra = precioCompra;
+        this.precioVenta = precioVenta;
         this.stock = stock;
     }
+
+    public Producto(Long id, String name, Double precioCompraVenta) {
+        this.id = id;
+        this.name = name;
+        this.precioCompra = precioCompraVenta;
+    }
+
+
 
     public Long getId() {
         return id;
@@ -35,12 +58,20 @@ public class Producto {
         this.name = name;
     }
 
-    public Double getPrecio() {
-        return precio;
+    public Double getPrecioCompra() {
+        return precioCompra;
     }
 
-    public void setPrecio(Double precio) {
-        this.precio = precio;
+    public void setPrecioCompra(Double precioCompra) {
+        this.precioCompra = precioCompra;
+    }
+
+    public Double getPrecioVenta() {
+        return precioVenta;
+    }
+
+    public void setPrecioVenta(Double precioVenta) {
+        this.precioVenta = precioVenta;
     }
 
     public Integer getStock() {
@@ -56,7 +87,8 @@ public class Producto {
         return "Producto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", precio=" + precio +
+                ", precioCompra=" + precioCompra +
+                ", precioVenta=" + precioVenta +
                 ", stock=" + stock +
                 '}';
     }
@@ -64,9 +96,15 @@ public class Producto {
     public static Producto from(ProductoRequest productoRequest){
         return new Producto(productoRequest.getId(),
                             productoRequest.getName(),
-                            productoRequest.getPrecio(),
+                            productoRequest.getPrecioCompra(),
+                            productoRequest.getPrecioVenta(),
                             productoRequest.getStock());
     }
 
+    public static Producto from(ProductoCompraRequest productoCompraRequest){
+        return new Producto(productoCompraRequest.getId(),
+                            productoCompraRequest.getName(),
+                            productoCompraRequest.getPrecioCompra());
+    }
 
 }
